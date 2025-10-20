@@ -1,13 +1,65 @@
-Simple CamIO 2D
+# Simple CamIO 2D
+
+Original research provided by the Coughlan Lab, The Smith-Kettlewell Eye Research Institute, San Francisco, CA, USA.
+
+Current implementation by Rivne Applied College of Information Technologies, Rivne, Ukraine.
 
 ## System deps to install
 ```bash
-sudo apt-get update && sudo apt-get install -y xvfb pulseaudio alsa-utils libasound2-dev portaudio19-dev x11vnc libgl1-mesa-glx
+sudo apt-get update
+# sound and display deps
+sudo apt-get install -y xvfb pulseaudio alsa-utils libasound2-dev portaudio19-dev x11vnc libgl1-mesa-glx
+# install mediapipe deps
+sudo apt install -y libxcb-shm0 libcdio-paranoia-dev libsdl2-2.0-0 libxv1  libtheora0 libva-drm2 libva-x11-2 libvdpau1 libharfbuzz0b libbluray2 libatlas-base-dev libhdf5-103 libgtk-3-0 libdc1394-22 libopenexr23
+
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
-## Service
 
+# Running in debug mode
+1. First ensure your webcam is connected and working.
+2. Create and activate a python virtual environment, then install the required libraries from requirements.txt.
+
+```
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+3. Copy "models" folder to this directory if not already present.
+Ensure the structure is as follows:
+```
+simple_camio/
+├── camio_opt.py
+├── run_camio.sh
+├── test_mp.py
+├── models/
+│   ├── CnapMap/
+│   │   ├── Audio/
+│   │   │   ├── room1.mp3
+│   │   │   ├── room2.mp3
+│   │   │   └── ...
+│   │   ├── CnapFirstFloor.json
+│   │   ├── CnapFirstFloor.png
+│   │   └── template.png
+│   └── ...
+```
+
+To test if mediapipe hand tracking is working correctly, run the test_mp.py script:
+```bash
+python test_mp.py
+```
+# Running Simple CamIO 2D
+To run Simple CamIO 2D, use the run_camio.sh script:
+```bash
+bash run_camio.sh
+```
+alternatively, you can run the camio_opt.py script directly with the appropriate input json file:
+```bash
+python camio_opt.py --input '/path/to/your/model.json'  
+```
+
+## Service
 Create a systemd service file at:
 
 `sudo nano /etc/systemd/system/camio.service`

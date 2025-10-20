@@ -38,6 +38,9 @@ os.environ['QT_ACCESSIBILITY'] = '0'
 # Force OpenCV to use headless backend
 os.environ['OPENCV_IO_ENABLE_OPENEXR'] = '1'
 os.environ['OPENCV_VIDEOIO_PRIORITY_MSMF'] = '0'
+os.environ['PULSE_LATENCY_MSEC'] = '60'
+
+
 
 logger.info("Environment variables set for headless operation")
 
@@ -343,9 +346,11 @@ logger.info("Starting main processing loop...")
 print("Press \"h\" key to update map position in image.")
 # Main loop
 
+clock = pygame.time.Clock()
 while cap.isOpened():
     ret, frame = cap.read()
     frame_count += 1
+    clock.tick(30)
     
     if not ret:
         logger.error("No camera image returned - breaking loop")
@@ -443,7 +448,7 @@ while cap.isOpened():
     # If the zone id is valid, play the sound for the zone
     logger.debug("Conveying zone information...")
     camio_player.convey(zone_id, gesture_status)
-
+    time.sleep(0.002)
     # Draw points in image
     img_scene_color = draw_rect_in_image(img_scene_color, interact.image_map_color.shape, H)
 
