@@ -1,17 +1,18 @@
 # Simple CamIO 2D
 
-Original research provided by the Coughlan Lab, The Smith-Kettlewell Eye Research Institute, San Francisco, CA, USA.
+Original research provided by the [Coughlan Lab, The Smith-Kettlewell Eye Research Institute, San Francisco, CA, USA](https://www.coughlan-lab.com/).
 
-Current implementation by Rivne Applied College of Information Technologies, Rivne, Ukraine.
+Current implementation provided by [Rivne Applied College of Information Technologies, Rivne, Ukraine](https://www.rv-it.college/).
 
 ### Installation Instructions
 
-There are several ways to install the required Python libraries. Below are instructions for installation on Debian Bookworm (RPi 4 Model B).
 The app can be run either in debug mode (from the command line) or as a background service that starts automatically on boot.
+Below are instructions for installation on Debian Bookworm (RPi 4 Model B).
 
 ## System deps to install
 ```bash
 sudo apt-get update
+sudo apt-get install -y ffmpeg python3-opencv python3-pip python3-venv
 # sound and display deps
 sudo apt-get install -y xvfb pulseaudio alsa-utils libasound2-dev portaudio19-dev x11vnc libgl1-mesa-glx
 # install mediapipe deps
@@ -107,34 +108,53 @@ journalctl -u camio.service -f
 
 ## About
 
-Description: Simple CamIO 2D is a Python version of CamIO specialized to a flat, rectangular model such as a tactile map. This version relies on finger/hand tracking rather than the use of a stylus.
+Simple CamIO 2D is a Python application for interactive tactile map exploration using hand gesture recognition. It replaces stylus-based input with finger tracking, enabling intuitive map interaction.
 
-Requirements: To run Simple CamIO 2D, one needs to set up several things. 
-- Firstly, There needs to be a json file that defines a model, that is it describes the components of an interactive map.  It contains the filenames of the various components of a model, as well as other important information such as the hotspot dictionary.  An example we recommend using as reference is models\UkraineMap\UkraineMap.json.
+### Requirements
 
-- Secondly, we require a printed map with text features along all four edges. An image of this map should be included, with its filename being specified in the element "template_image" of the model dictionary of the input json file.  We recommend using models\UkraineMap\template.png as an example to print out.
+**Model Configuration**
+- A JSON file defining the interactive map model, including component filenames and hotspot mappings
+- Reference: `models/UkraineMap/UkraineMap.json`
 
-- Next, we require a digital version of the map that represents hotspot zones with unique indices as in models\UkraineMap\UkraineMap.png, and this filename should be specified in the element "filename" of the model dictionary of the input json file. Each index is a specific (R,G,B) color value. The image dimensions should match that of the template image. 
+**Physical Setup**
+- Printed map with text features along all four edges
+- Template image specified in the JSON model (reference: `models/UkraineMap/template.png`)
 
-- Sound files, as named in the hotspots dictionary in the supplied json file, should be placed in the appropriate folder, as specified in the hotspots dictionary. The hotspots dictionary maps the zone index (from the zone map) to the sound file.
+**Digital Assets**
+- Hotspot zone map with unique color-indexed regions matching template dimensions
+- Filename specified in JSON model (reference: `models/UkraineMap/UkraineMap.png`)
+- Sound files mapped to zones via the hotspots dictionary
 
-- Python 3.9 installed with opencv, numpy, scipy, mediapipe, and pyglet libraries (most of which can be installed through Anaconda, except mediapipe and pyglet which need to be installed via pip). The required library versions are specified in the requirements.txt file.
+**Software**
+- Python 3.9 with: opencv, numpy, scipy, mediapipe, pyglet/pygame
+- Versions specified in `requirements.txt`
 
-For best performance, we recommend the camera sit above the map to get a fronto-parallel view as much as possible. The camera should have an unobstructed view of the 4 sides of the map, and the hand should be held such that the camera can clearly view it. The map should be close enough to the camera to take up most of the space in the camera image (so it is well resolved), but sufficient space (roughly 20 cm) between the map and the edges of the image should be available to ensure reliable finger/hand tracking even when the user is pointing to a feature near an edge of the map.
+### Camera and Setup Recommendations
 
-To run, simply run the simple_camio.py script as `python simple_camio.py --input \<json file\>` where \<json file\> is the location of the json file containing the model parameters, such as models/UkraineMap/UkraineMap.json. 
+- Position camera above the map for fronto-parallel alignment
+- Ensure unobstructed view of all four map edges
+- Maintain ~20 cm clearance from map edges to image boundaries
+- Keep map well-resolved in frame with adequate hand tracking space
 
-To reset the homography, that is, to update the map position in the image, press the 'h' key.
+**Controls:**
+- Press `h` to reset and recalibrate homography
+- Extend index finger with other fingers curled to point
+- Keep hand flat against map surface for optimal tracking
 
-To use, simply make a pointing gesture by extending the index finger out and curling in the other fingers.  The area on the map indicated under the tip of the index finger will be dictated aloud.  The hand should be kept flat against the surface with the finger jutting out rather than the hand being held up above the map with the finger pointed down.
+**Pointing Gesture:**
 
-![](img/pointing_yes.jpg) ![](img/pointing_no.jpg)
 
-__________________________________________________
-How to install Python libraries
-1. Download and install Python 3.9.13 from https://www.python.org.
-2. From the command line, in your working directory, type and enter "python -m venv camio"
-3. Then type and enter "camio\Scripts\activate"
-4. Then type and enter "git clone https://github.com/Coughlan-Lab/simple_camio.git"
-5. Then type and enter "cd simple_camio" followed by "git fetch" and "git checkout simple_camio_2d"
-6. Then type and enter "pip install -r requirements.txt"
+<detail>
+<summary>Click to expand/collapse</summary>
+
+
+The pointing gesture is defined as extending the index finger while curling the other fingers towards the palm. This gesture is used to interact with the map and trigger audio feedback for the selected hotspot.
+
+![](img/pointing_yes.jpg) 
+
+![](img/pointing_no.jpg)
+</detail>
+
+## Acknowledgements
+- Based on research by Coughlan Lab, Smith-Kettlewell Eye Research Institute - [Repo](https://github.com/Coughlan-Lab/simple_camio.git)
+- Developed by Rivne Applied College of Information Technologies, Ukraine
