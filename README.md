@@ -4,23 +4,28 @@ Original research provided by the Coughlan Lab, The Smith-Kettlewell Eye Researc
 
 Current implementation by Rivne Applied College of Information Technologies, Rivne, Ukraine.
 
+### Installation Instructions
+
+There are several ways to install the required Python libraries. Below are instructions for installation on Debian Bookworm (RPi 4 Model B).
+The app can be run either in debug mode (from the command line) or as a background service that starts automatically on boot.
+
 ## System deps to install
 ```bash
 sudo apt-get update
 # sound and display deps
 sudo apt-get install -y xvfb pulseaudio alsa-utils libasound2-dev portaudio19-dev x11vnc libgl1-mesa-glx
 # install mediapipe deps
-sudo apt install -y libxcb-shm0 libcdio-paranoia-dev libsdl2-2.0-0 libxv1  libtheora0 libva-drm2 libva-x11-2 libvdpau1 libharfbuzz0b libbluray2 libatlas-base-dev libhdf5-103 libgtk-3-0 libdc1394-22 libopenexr23
+sudo apt install -y libxcb-shm0 libcdio-paranoia-dev libsdl2-2.0-0 libxv1  libtheora0 libva-drm2 libva-x11-2 libvdpau1 libharfbuzz0b libbluray2 libatlas-base-dev libhdf5-103 libgtk-3-0
 
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-# Running in debug mode
+## Running in debug mode
 1. First ensure your webcam is connected and working.
 2. Create and activate a python virtual environment, then install the required libraries from requirements.txt.
 
-```
+```bash
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -49,7 +54,7 @@ To test if mediapipe hand tracking is working correctly, run the test_mp.py scri
 ```bash
 python test_mp.py
 ```
-# Running Simple CamIO 2D
+## Running Simple CamIO 2D
 To run Simple CamIO 2D, use the run_camio.sh script:
 ```bash
 bash run_camio.sh
@@ -65,6 +70,7 @@ Create a systemd service file at:
 `sudo nano /etc/systemd/system/camio.service`
 
 Insert the following:
+
 ```ini
 [Unit]
 Description=Run Camio
@@ -83,6 +89,22 @@ Environment=PATH=/home/user/.pyenv/bin:/home/user/.pyenv/shims:/usr/local/bin:/u
 WantedBy=multi-user.target
 ```
 
+Now enable and start the service:
+```bash
+sudo systemctl enable camio.service
+sudo systemctl start camio.service
+```
+
+To check the status of the service:
+```bash
+sudo systemctl status camio.service
+```
+To view logs:
+```bash
+journalctl -u camio.service -f
+```
+
+
 ## About
 
 Description: Simple CamIO 2D is a Python version of CamIO specialized to a flat, rectangular model such as a tactile map. This version relies on finger/hand tracking rather than the use of a stylus.
@@ -100,11 +122,12 @@ Requirements: To run Simple CamIO 2D, one needs to set up several things.
 
 For best performance, we recommend the camera sit above the map to get a fronto-parallel view as much as possible. The camera should have an unobstructed view of the 4 sides of the map, and the hand should be held such that the camera can clearly view it. The map should be close enough to the camera to take up most of the space in the camera image (so it is well resolved), but sufficient space (roughly 20 cm) between the map and the edges of the image should be available to ensure reliable finger/hand tracking even when the user is pointing to a feature near an edge of the map.
 
-To run, simply run the simple_camio.py script as "python simple_camio.py --input \<json file\>" where \<json file\> is the location of the json file containing the model parameters, such as models/UkraineMap/UkraineMap.json. 
+To run, simply run the simple_camio.py script as `python simple_camio.py --input \<json file\>` where \<json file\> is the location of the json file containing the model parameters, such as models/UkraineMap/UkraineMap.json. 
 
 To reset the homography, that is, to update the map position in the image, press the 'h' key.
 
 To use, simply make a pointing gesture by extending the index finger out and curling in the other fingers.  The area on the map indicated under the tip of the index finger will be dictated aloud.  The hand should be kept flat against the surface with the finger jutting out rather than the hand being held up above the map with the finger pointed down.
+
 ![](img/pointing_yes.jpg) ![](img/pointing_no.jpg)
 
 __________________________________________________
