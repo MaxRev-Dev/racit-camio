@@ -143,17 +143,18 @@ Simple CamIO 2D is a Python application for interactive tactile map exploration 
 
 **Pointing Gesture:**
 
+ 
 
-<detail>
-<summary>Click to expand/collapse</summary>
-
+<details>
+<summary>Example</summary>
 
 The pointing gesture is defined as extending the index finger while curling the other fingers towards the palm. This gesture is used to interact with the map and trigger audio feedback for the selected hotspot.
 
 ![](img/pointing_yes.jpg) 
 
 ![](img/pointing_no.jpg)
-</detail>
+
+</details>
 
 ## Acknowledgements
 - Based on research by Coughlan Lab, Smith-Kettlewell Eye Research Institute - [Repo](https://github.com/Coughlan-Lab/simple_camio.git)
